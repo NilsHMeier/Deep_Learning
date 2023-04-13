@@ -6,8 +6,8 @@ def task1():
     matrix = th.full(size=(13, 13), fill_value=1, dtype=th.int8)
 
     # Fill in the columns and rows with twos
-    matrix[[1, 6, -1], :] = 2
-    matrix[:, [1, 6, -1]] = 2
+    matrix[[1, 6, -2], :] = 2
+    matrix[:, [1, 6, -2]] = 2
 
     # Fill in the left threes
     matrix[3:5, 3:5] = 3
