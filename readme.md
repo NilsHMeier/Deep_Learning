@@ -10,3 +10,4 @@ content in this repository are updated regularly based on the progress of the co
 
 ## Exercises
 - Exercise 1: PyTorch basics, Sigmoid and Softmax
+- Exercise 2: Perceptron, Novikoff-Theorem and MNIST classification
