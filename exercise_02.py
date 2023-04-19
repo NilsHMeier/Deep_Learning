@@ -174,11 +174,13 @@ def task_4():
 
     # Set the bound: 4R² / margin²
     bound = round(4 * R ** 2 / margin ** 2)
+
     # Check if the bound holds for all experiments
     print(f'{bound = } iterations ')
     if np.max(res) <= bound:
         print('Bound holds for all experiments')
 
+    # Plot the histogram of the number of updates
     fig, ax = plt.subplots()
     ax.hist(res, density=True)
     fig.show()
