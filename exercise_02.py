@@ -2,7 +2,6 @@ import torchvision.datasets
 from sklearn.svm import LinearSVC
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
 from scipy.spatial import ConvexHull
 from shapely.geometry import Polygon
 from sklearn import datasets
@@ -37,7 +36,7 @@ def is_linearly_separable(pos_class: np.ndarray, neg_class: np.ndarray) -> bool:
     return not Polygon(pos_hull.points).intersects(Polygon(neg_hull.points))
 
 
-def plot_dataset(features: np.ndarray, labels: np.ndarray, filename: str = None) -> Figure:
+def plot_dataset(features: np.ndarray, labels: np.ndarray, filename: str = None):
     fig, ax = plt.subplots(tight_layout=True)
     ax.set_aspect(1)
     ax.plot(features[labels == +1, 0], features[labels == +1, 1], 'ro', label="positive class")
@@ -61,7 +60,7 @@ def train_perceptron(data_points, labels, weights, max_iterations: int = 1000, l
     while num_iterations < max_iterations and mistakes_made:
         mistakes_made = False
         for i in range(data_points.shape[0]):
-            # If the current data point is misclassified, update weights and bias
+            # If the current data point is misclassified, update weights
             if labels[i] * np.dot(weights, data_points[i]) <= 0:
                 weights += lr * labels[i] * data_points[i]
                 mistakes_made = True
@@ -174,10 +173,11 @@ def task_4():
     fig.savefig('Figures/exercise_02_Boundaries.png')
 
     # Set the bound: 4R² / margin²
-    bound = 4 * R ** 2 / margin ** 2
+    bound = round(4 * R ** 2 / margin ** 2)
     # Check if the bound holds for all experiments
-    print(f'{bound=}')
-    print(np.all(res <= bound))
+    print(f'{bound = } iterations ')
+    if np.max(res) <= bound:
+        print('Bound holds for all experiments')
 
     fig, ax = plt.subplots()
     ax.hist(res, density=True)
@@ -227,10 +227,8 @@ def task_5():
     X_test = X_test[subset_indices_test].numpy()
     y_test = y_test[subset_indices_test].numpy()
     y_test[y_test == 0] = -1
-    print(X_test.shape)
     X_test = X_test.reshape(X_test.shape[0], -1)
     X_test = np.hstack((np.ones(shape=(X_test.shape[0], 1)), X_test))
-    print(X_test.shape)
 
     # check the classification error on train data
     test_predictions = np.sign(np.dot(X_test, w))
