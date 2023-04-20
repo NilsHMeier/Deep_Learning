@@ -131,10 +131,10 @@ def task_4():
     X, y = make_binary_clusters(n_points=100, linearly_separable=True)
 
     # Plot toy data
-    plot_dataset(features=X, labels=y, filename='Figures/exercise_02_Dataset.png')
+    plot_dataset(features=X, labels=y, filename='Figures/exercise_02/Dataset.png')
 
     # Find the margin and the maximum norm
-    R, margin = find_maximal_margin(features=X, labels=y, filename='Figures/exercise_02_Margin.png')
+    R, margin = find_maximal_margin(features=X, labels=y, filename='Figures/exercise_02/Margin.png')
 
     # Prepend a 1 to each data point for the bias
     X = np.hstack((np.ones(X.shape[0]).reshape(-1, 1), X))
@@ -146,13 +146,13 @@ def task_4():
     dom = np.linspace(X[:, 1].min() - 2, X[:, 1].max() + 2, 10)
 
     # Show the decision hyperplane for the current w
-    plot_decision_hyperplane(features=X, labels=y, weights=w, domain=dom, filename='Figures/exercise_02_Initial.png')
+    plot_decision_hyperplane(features=X, labels=y, weights=w, domain=dom, filename='Figures/exercise_02/Initial.png')
 
     # Train the Perceptron and show the updated decision boundary
     w, total_updates = train_perceptron(X, y, w)
 
     # show the decision hyperplane for the learned w
-    plot_decision_hyperplane(features=X, labels=y, weights=w, domain=dom, filename='Figures/exercise_02_Fitted.png')
+    plot_decision_hyperplane(features=X, labels=y, weights=w, domain=dom, filename='Figures/exercise_02/Fitted.png')
 
     # Run the perceptron several times with random w initializations
     fig, ax = plt.subplots(figsize=(15, 10), tight_layout=True)
@@ -170,7 +170,7 @@ def task_4():
         ax.plot(dom, calculate_boundary(dom, w), 'k-', alpha=0.1)  # k is short for black
     ax.legend(loc=2)
     fig.show()
-    fig.savefig('Figures/exercise_02_Boundaries.png')
+    fig.savefig('Figures/exercise_02/Boundaries.png')
 
     # Set the bound: 4R² / margin²
     bound = round(4 * R ** 2 / margin ** 2)
@@ -184,7 +184,7 @@ def task_4():
     fig, ax = plt.subplots()
     ax.hist(res, density=True)
     fig.show()
-    fig.savefig('Figures/exercise_02_Iterations.png')
+    fig.savefig('Figures/exercise_02/Iterations.png')
 
 
 def task_5():
@@ -244,7 +244,7 @@ def task_5():
         ax[i].imshow(X_test[idx, 1:].reshape(28, 28))
         ax[i].set(title=f'Actual Label is {int(y_test[idx])} \n Predicted Label is {int(test_predictions[idx])}')
     fig.show()
-    fig.savefig('Figures/exercise_02_Mistakes.png')
+    fig.savefig('Figures/exercise_02/Mistakes.png')
 
 
 if __name__ == '__main__':
