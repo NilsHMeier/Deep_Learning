@@ -2,6 +2,7 @@ from .Losses import SquaredError, Loss
 from .Activations import Sigmoid, Activation
 from typing import List
 import numpy as np
+from tqdm import tqdm
 
 
 class NeuralNetwork:
@@ -121,7 +122,8 @@ class NeuralNetwork:
 
         # Loop over the iterations and save the loss after each iteration
         loss = [self.loss(y, self.forward(x))]
-        for i in range(iterations):
+        for _ in tqdm(range(iterations)):
+            weight_gradients, bias_gradients = None, None
             if mode == 'sgd':
                 # Compute the gradients for each individual sample
                 for j in range(x.shape[0]):

@@ -5,3 +5,4 @@ scikit-learn
 torchvision
 scipy
 shapely
+tqdm
