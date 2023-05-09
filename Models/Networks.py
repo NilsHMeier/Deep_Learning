@@ -94,7 +94,7 @@ class NeuralNetwork:
         deltas = [np.nan] * (len(self.weight))
 
         # Compute the delta of the last layer using the gradient of the loss
-        deltas[-1] = self.loss.gradient(y, self._x[-1], self.activation[-1].gradient(self._s[-1]))
+        deltas[-1] = self.loss.gradient(y, self._x[-1]) * self.activation[-1].gradient(self._s[-1])
 
         # Loop over all layers in reverse order
         for i in range(len(self.neurons_per_layer) - 2, 0, -1):

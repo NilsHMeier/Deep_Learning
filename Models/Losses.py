@@ -8,7 +8,7 @@ class Loss(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def gradient(self, y_true: np.ndarray, y_pred: np.ndarray, signal_derivative: np.ndarray) -> np.ndarray:
+    def gradient(self, y_true: np.ndarray, y_pred: np.ndarray) -> np.ndarray:
         pass
 
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
@@ -24,6 +24,6 @@ class SquaredError(Loss):
         # Compute the loss
         return np.mean(np.square(y_pred - y_true))
 
-    def gradient(self, y_true: np.ndarray, y_pred: np.ndarray, signal_derivative: np.ndarray) -> np.ndarray:
+    def gradient(self, y_true: np.ndarray, y_pred: np.ndarray) -> np.ndarray:
         # Compute the gradient
-        return 2 * (y_pred - y_true) * signal_derivative
+        return 2 * (y_pred - y_true)
