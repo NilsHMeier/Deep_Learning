@@ -44,7 +44,16 @@ class Softmax(Activation):
         return np.exp(z) / np.sum(np.exp(z), axis=0)
 
     def gradient(self, z: np.ndarray) -> np.ndarray:
-        return self.evaluate(z) * (1 - self.evaluate(z))
+        # Compute the jacobi matrix
+        pred = self.evaluate(z)
+        J = np.zeros((z.shape[0], z.shape[0]))
+        for i in range(z.shape[0]):
+            for j in range(z.shape[0]):
+                if i == j:
+                    J[i, j] = pred[i] * (1 - pred[i])
+                else:
+                    J[i, j] = -pred[i] * pred[j]
+        return J
 
 
 class ELU(Activation):
