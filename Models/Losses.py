@@ -27,3 +27,12 @@ class SquaredError(Loss):
     def gradient(self, y_true: np.ndarray, y_pred: np.ndarray) -> np.ndarray:
         # Compute the gradient
         return 2 * (y_pred - y_true)
+
+
+class CrossEntropy(Loss):
+
+    def evaluate(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
+        return -np.sum(y_true * np.log(y_pred))
+
+    def gradient(self, y_true: np.ndarray, y_pred: np.ndarray) -> np.ndarray:
+        return y_pred - y_true
