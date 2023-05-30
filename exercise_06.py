@@ -26,18 +26,33 @@ def load_and_preprocess_mnist(train: bool, root_dir: str = './data') -> DataLoad
 
 
 class ConvNetwork(nn.Module):
-    def __init__(self, input_shape: Tuple[int, int], batch_size: int, num_classes: int):
+    def __init__(self, input_shape: Tuple[int, int], num_conv_layers: int, num_classes: int):
         super().__init__()
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=4, kernel_size=3)
+        self.input_shape = input_shape
+
+        # Create the convolutional layers
+        conv_layers = []
+        for i in range(num_conv_layers):
+            in_channels = 1 if i == 0 else 4 * (2 ** (i - 1))
+            out_channels = 4 * (2 ** i)
+            conv_layers.append(nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=3))
+        self.conv_layers = nn.ModuleList(conv_layers)
+
+        # Create a 2x2 max pooling layer
         self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(in_channels=4, out_channels=8, kernel_size=3)
-        self.fc1 = nn.Linear(in_features=8 * 5 * 5, out_features=128)
+
+        # Calculate the shape of the output of the convolutional layers
+        for _ in range(num_conv_layers):
+            input_shape = (input_shape[0] - 2) // 2, (input_shape[1] - 2) // 2
+
+        self.fc1 = nn.Linear(in_features=8 * torch.prod(torch.tensor(input_shape)), out_features=128)
         self.fc2 = nn.Linear(in_features=128, out_features=64)
         self.fc3 = nn.Linear(in_features=64, out_features=num_classes)
 
     def forward(self, x):
-        x = self.pool(functional.relu(self.conv1(x)))
-        x = self.pool(functional.relu(self.conv2(x)))
+        for conv_layer in self.conv_layers:
+            x = functional.relu(conv_layer(x))
+            x = self.pool(x)
         x = torch.flatten(x, 1)
         x = functional.relu(self.fc1(x))
         x = functional.relu(self.fc2(x))
@@ -57,7 +72,7 @@ def task_18():
           f'Test labels shape: {test_loader.dataset.targets.shape}')
 
     # Create a ConvNetwork instance and train it on the dataset
-    model = ConvNetwork(input_shape=(28, 28), batch_size=BATCH_SIZE, num_classes=10)
+    model = ConvNetwork(input_shape=(28, 28), num_conv_layers=2, num_classes=10)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(params=model.parameters(), lr=0.001)
 
